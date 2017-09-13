@@ -422,6 +422,8 @@ age.min.pred = seq(from=14,to=25,length.out=1000) # ages for calculation of age 
 
 ### empirical results
 
+x = age.bin
+
 # correlation
 g = gam(sc.bin.m ~ s(x, k=kspl, m=2), min.sp=min.sp, method = 'REML')
 sc.bin.m.g.aic = AIC(g) # AIC
