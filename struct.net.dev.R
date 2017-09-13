@@ -1244,7 +1244,7 @@ dev.off()
 pdf(paste(dir.path,'age_var/relns/dct_vs_dstr.pdf',sep=''),width=6,height=5)
 par(mar=c(5, 5, 3, 1) + 0.1, cex.lab = 2.25, cex.axis = 1.75, cex.main = 2.25, font.main = 1, bg='white')
 x = ct.sl; l = lm(str.sl~x); 
-spear = cor.test(ct.sl,deg.sl,method='spearman'); sp.rho = spear$estimate; sp.p = spear$p.value
+spear = cor.test(ct.sl,str.sl,method='spearman'); sp.rho = spear$estimate; sp.p = spear$p.value
 plot(ct.sl,str.sl,xaxt='n',xlab=expression(paste(Delta,' CT (mm/year)',sep='')),ylab=expression(paste(Delta,s[lin],' (year'^'-1',')')), main = rp.main.sp(sp.rho,sp.p,2), pch = 19, col='black', xlim=c(-0.04,0.015), ylim=c(-0.04,0.03));
 axis(1,at=seq(-0.04,0.01,b=0.01),labels=c(-0.04,'',-0.02,'',0,''))
 pred = predict(l,newdata=data.frame('x'=dct.pred),interval='confidence')
@@ -1256,7 +1256,7 @@ dev.off()
 pdf(paste(dir.path,'age_var/relns/dmt_vs_dstr.pdf',sep=''),width=6,height=5)
 par(mar=c(5, 5, 3, 1) + 0.1, cex.lab = 2, cex.axis = 1.5, cex.main = 2, font.main = 1, bg='white')
 x = mt.sl; l = lm(str.sl~x); 
-spear = cor.test(ct.sl,deg.sl,method='spearman'); sp.rho = spear$estimate; sp.p = spear$p.value
+spear = cor.test(ct.sl,str.sl,method='spearman'); sp.rho = spear$estimate; sp.p = spear$p.value
 plot(mt.sl,str.sl,xlab=expression(paste(Delta,'MT (PU/year)',sep='')),ylab=expression(paste(Delta,s[lin],' (year'^'-1',')')), main = rp.main.sp(sp.rho,sp.p,2), pch = 19, col='black', xlim=c(min(dmt.pred),max(dmt.pred)), ylim=c(-0.04,0.03));
 pred = predict(l,newdata=data.frame('x'=dmt.pred),interval='confidence')
 polygon(c(rev(dmt.pred), dmt.pred), c(rev(pred[ ,3]), pred[ ,2]), col = col2alpha('grey',alpha=0.5), border = NA)
