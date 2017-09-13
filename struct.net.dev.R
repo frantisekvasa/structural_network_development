@@ -16,7 +16,7 @@ source('rp.main.R')
 # set path
 dir.path = '~/R/str_net_dev/'
 
-load(paste(dir.path,'str.net.dev.data.RData',sep='')) 
+load(paste(dir.path,'mri.data.RData',sep='')) 
 # ct            cortical thickness [mm] (297 participants x 308 regions of interest)
 # mt            cortical magnetization transfer [PU = percentage units] - a measure of myelination *at 70% cortical depth* (297 participants x 308 regions of interest)
 # mt.depth      cortical magnetization transfer [PU = percentage units] - a measure of myelination *at 13 cortical/white matter depths* (13 depths x 297 participants x 308 regions of interest)
