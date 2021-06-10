@@ -47,11 +47,16 @@ for (i in 1:nboot) {
   boot.id = sample(1:ns,size=ns,replace=T)  # sample participants w/ replacement
   sc.boot[,,i] = cor(ct[boot.id,])          # bootstrapped SC
 }
-boot.p = 1-sign(sc)*abs(apply(sign(sc.boot),c(1,2),sum)/nboot) # bootstrap p-value - what proportion of bootstrap signs are inconsistent with empirical value?
-boot.p.fdr = matrix(p.adjust(boot.p, method = "fdr"),nrow=nroi,byrow=T) # FDR correct p-values
+# bootstrap p-value - what proportion of bootstrap signs are inconsistent with empirical value?
+sc.rep = replicate(nboot,sc)                                      # replicate empirical sc "nboot" times, to match dimensions of sc.boot
+boot.p = apply(sign(sc.rep)!=sign(sc.boot),c(1,2),sum)/nboot      # the p-value is defined as the proportion of times (across bootstraps) that the sign of empirical sc does not match the signs of empirical 
+# boot.p = 1-apply(sign(sc.rep)==sign(sc.boot),c(1,2),sum)/nboot  # (equivalent definition to above)
+boot.p.fdr = matrix(p.adjust(boot.p, method = "fdr"),nrow=nroi,byrow=T) # FDR correct p-values for multiple comparisons
 sc.thr = array(NA,dim=c(nroi,nroi)) # initialise thresholded matrix
 sc.thr[boot.p.fdr<0.01] = sc[boot.p.fdr<0.01] # set alpha; here alphaFDR = 0.01
 sc.thr[as.logical(diag(nroi))] = NA; # set diagonal to NA (self-correlations to be ignored)
+
+rm(sc.rep) # remove temporary variable
 
 d = sum(!is.na(sc.thr[triup]))/((nroi*(nroi-1))/2) # edge density of age-invariant network
 
@@ -171,7 +176,9 @@ for (b in 1:nbin) {
   boot.id.all[[b]] = temp.id # store bootstrapped IDs for all subjects in window
   
   # use bootstraps to threshold correlation matrices
-  boot.p = 1-abs(apply(sign(sc.bin.b[,,b,]),c(1,2),sum)/nboot) # bootstrap p-value (how consistent is the sign of correlation across bootstraps?)
+  sc.bin.rep = replicate(nboot,sc.bin[,,b])                                     # replicate empirical sc "nboot" times, to match dimensions of sc.boot
+  boot.p = apply(sign(sc.bin.rep)!=sign(sc.bin.b[,,b,]),c(1,2),sum)/nboot       # the p-value is defined as the proportion of times (across bootstraps) that the sign of empirical sc does not match the signs of empirical 
+  # boot.p = 1-apply(sign(sc.bin.rep)==sign(sc.bin.b[,,b,]),c(1,2),sum)/nboot   # (equivalent definition to above)
   boot.p.fdr = matrix(p.adjust(boot.p, method = "fdr"),nrow=nroi,byrow=T) # FDR correct p-values
   temp.thr = array(NA,dim=c(nroi,nroi))                     # initialise window matrix
   temp.thr[boot.p.fdr<0.01] = sc.bin[,,b][boot.p.fdr<0.01]  # set alpha; here alphaFDR = 0.01
@@ -179,7 +186,7 @@ for (b in 1:nbin) {
   sc.bin.thr[,,b] = temp.thr                                # assign thresholded matrix
   
 } 
-rm(temp.id,boot.p,boot.p.fdr,temp.thr) # remove temporary variables
+rm(temp.id,boot.p,boot.p.fdr,temp.thr,sc.bin.rep) # remove temporary variables
 
 ### calculate nodal network measures
 # nodal strength and degree
