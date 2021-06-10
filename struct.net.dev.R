@@ -49,7 +49,7 @@ for (i in 1:nboot) {
 }
 # bootstrap p-value - what proportion of bootstrap signs are inconsistent with empirical value?
 sc.rep = replicate(nboot,sc)                                      # replicate empirical sc "nboot" times, to match dimensions of sc.boot
-boot.p = apply(sign(sc.rep)!=sign(sc.boot),c(1,2),sum)/nboot      # the p-value is defined as the proportion of times (across bootstraps) that the sign of empirical sc does not match the signs of empirical 
+boot.p = apply(sign(sc.rep)!=sign(sc.boot),c(1,2),sum)/nboot      # the p-value is defined as the proportion of times (across bootstraps) that the sign of empirical SC does not match the signs of bootstrapped SC 
 # boot.p = 1-apply(sign(sc.rep)==sign(sc.boot),c(1,2),sum)/nboot  # (equivalent definition to above)
 boot.p.fdr = matrix(p.adjust(boot.p, method = "fdr"),nrow=nroi,byrow=T) # FDR correct p-values for multiple comparisons
 sc.thr = array(NA,dim=c(nroi,nroi)) # initialise thresholded matrix
@@ -177,7 +177,7 @@ for (b in 1:nbin) {
   
   # use bootstraps to threshold correlation matrices
   sc.bin.rep = replicate(nboot,sc.bin[,,b])                                     # replicate empirical sc "nboot" times, to match dimensions of sc.boot
-  boot.p = apply(sign(sc.bin.rep)!=sign(sc.bin.b[,,b,]),c(1,2),sum)/nboot       # the p-value is defined as the proportion of times (across bootstraps) that the sign of empirical sc does not match the signs of empirical 
+  boot.p = apply(sign(sc.bin.rep)!=sign(sc.bin.b[,,b,]),c(1,2),sum)/nboot       # the p-value is defined as the proportion of times (across bootstraps) that the sign of empirical SC does not match the signs of bootstrapped SC
   # boot.p = 1-apply(sign(sc.bin.rep)==sign(sc.bin.b[,,b,]),c(1,2),sum)/nboot   # (equivalent definition to above)
   boot.p.fdr = matrix(p.adjust(boot.p, method = "fdr"),nrow=nroi,byrow=T) # FDR correct p-values
   temp.thr = array(NA,dim=c(nroi,nroi))                     # initialise window matrix
